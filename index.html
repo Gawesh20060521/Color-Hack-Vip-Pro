@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+			background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 20px;
+			box-shadow: 0 0 10px rgba(1, 1, 1, 2.9);
+            text-align: center;
+        }
+		
+		#title {
+            color: red;
+        }
+	
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            border: 3px solid #ccc;
+            border-radius: 5px;
+        }
+		
+		
+		
+        #loginBtn {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 40px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        #warning {
+            color: red;
+            margin-top: 30px;
+        }
+
+        .calculator-container {
+            display: none;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 4.9);
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        #calculatorBtn {
+            background-color: green;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .result-container {
+            margin-top: 30px;
+        }
+
+        .red-circle {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .green-circle {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background-color: green;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="login-form">
+        <h1>User Name</h1>
+        <input type="text" id="username" placeholder="Username" required>
+        <h1>Password</h1>
+        <input type="password" id="password" placeholder="Password" required> <br>
+        <br><button onclick="checkCredentials()">Login</button>
+        <p id="message"></p>
+    </div>
+    
+    <div id="content" style="display: none;">
+        <h1>Period</h1>
+        <input type="number" id="period" placeholder="Enter Period" required>
+        <h1>Price</h1>
+        <input type="number" id="price" placeholder="Enter Price" required>
+        <button onclick="calculateResult()">Calculate</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function checkCredentials() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            
+            if ((password === "777#777" || password === "Shan02") && username !== "") {
+                document.getElementById("message").innerHTML = "Login success";
+                document.getElementById("login-form").style.display = "none";
+                document.getElementById("content").style.display = "block";
+
+                // Save the username and password in local storage
+                localStorage.setItem("savedUsername", username);
+                localStorage.setItem("savedPassword", password);
+            } else {
+                document.getElementById("message").innerHTML = "Login failed";
+            }
+        }
+
+        function calculateResult() {
+            var period = parseInt(document.getElementById("period").value);
+            var price = parseInt(document.getElementById("price").value);
+
+            if (!isNaN(period) && !isNaN(price)) {
+                var result = price - period;
+
+                // Calculate the sum of digits
+                var sumOfDigits = 0;
+                var resultStr = result.toString();
+                for (var i = 0; i < resultStr.length; i++) {
+                    sumOfDigits += parseInt(resultStr[i]);
+                }
+
+                // Define arrays for red and green digits
+                var redDigits = [6, 7, 8, 10, 11, 13, 17, 19, 21, 24, 25, 26, 29, 30, 31, 32, 35, 36, 41, 42];
+                var greenDigits = [9, 12, 14, 15, 16, 18, 20, 22, 23, 27, 28, 33, 34, 37, 38, 39, 40, 43, 44, 45];
+                
+                // Check if the sum of digits is red or green and display it
+                if (redDigits.includes(sumOfDigits)) {
+                    document.getElementById("result").innerHTML = "Result - Red";
+                } else if (greenDigits.includes(sumOfDigits)) {
+                    document.getElementById("result").innerHTML = "Result - Green";
+                }
+            } else {
+                document.getElementById("result").innerHTML = "Invalid inputs";
+            }
+        }
+
+        // Check if saved username and password exist and auto-fill them
+        var savedUsername = localStorage.getItem("savedUsername");
+        var savedPassword = localStorage.getItem("savedPassword");
+
+        if (savedUsername && savedPassword) {
+            document.getElementById("username").value = savedUsername;
+            document.getElementById("password").value = savedPassword;
+        }
+    </script>
+</body>
+</html>
